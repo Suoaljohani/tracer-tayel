@@ -47,6 +47,14 @@ struct RootView: View {
         }
         .id(settings.language)
         .onAppear {
+            #if DEBUG
+            if DemoMode.isOn {
+                showSplash = DemoMode.screen == "splash"
+                revealed = !showSplash
+                DemoMode.prepare(context, router: router)
+                return
+            }
+            #endif
             Seeder.seedIfNeeded(context)
             DepartmentStore.shared.refresh(context)
         }

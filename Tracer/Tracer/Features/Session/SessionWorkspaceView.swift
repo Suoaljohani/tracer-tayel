@@ -111,6 +111,9 @@ private struct WorkspaceContent: View {
         }
         .onAppear {
             if let raw = WorkspaceTab(rawValue: session.lastTabRaw) { ws.tab = raw }
+            #if DEBUG
+            if DemoMode.showAnalysisOnOpen { ws.showAnalysis = true }
+            #endif
         }
         .onChange(of: ws.tab) { _, new in
             session.lastTabRaw = new.rawValue
