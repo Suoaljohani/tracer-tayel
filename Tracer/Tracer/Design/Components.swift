@@ -89,6 +89,22 @@ struct AmbientBackground: View {
     }
 }
 
+// MARK: - Glass
+
+extension View {
+    /// Liquid Glass on iOS 26, refined material on earlier systems.
+    @ViewBuilder
+    func luxGlass<S: Shape>(_ shape: S, tint: Color? = nil) -> some View {
+        if #available(iOS 26.0, *) {
+            self.glassEffect(.regular.tint(tint).interactive(), in: shape)
+        } else {
+            self
+                .background(shape.fill(.ultraThinMaterial))
+                .background(shape.fill(tint ?? .clear))
+        }
+    }
+}
+
 // MARK: - Buttons
 
 struct PressableStyle: ButtonStyle {

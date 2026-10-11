@@ -58,6 +58,13 @@ struct AssessView: View {
                 .animation(Motion.luxe, value: session.currentNodeID)
             }
             .scrollDismissesKeyboard(.interactively)
+            .onAppear {
+                #if DEBUG
+                if DemoMode.showAnalysisOnOpen {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { proxy.scrollTo("analysisTop", anchor: .top) }
+                }
+                #endif
+            }
             .onChange(of: session.currentNodeID) { _, _ in
                 withAnimation(Motion.luxe) { proxy.scrollTo("top", anchor: .top) }
             }
@@ -285,6 +292,7 @@ struct EvaluationCard: View {
         VStack(alignment: .leading, spacing: 16) {
             questionBlock
             modeSwitch
+                .id("analysisTop")
             if ws.showAnalysis, let rec = item.latestAnalysis, let result = rec.result {
                 AnalysisPanel(item: item, session: session, record: rec, result: result)
                     .transition(.asymmetric(insertion: .opacity.combined(with: .offset(y: 20)), removal: .opacity))

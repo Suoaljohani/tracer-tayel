@@ -92,7 +92,7 @@ struct PathMapView: View {
                             if let a = positions[e.fromNodeID], let b = positions[e.toNodeID] {
                                 let fromD = dept(session.nodes.first { $0.id == e.fromNodeID }?.departmentCode)
                                 let toD = dept(session.nodes.first { $0.id == e.toNodeID }?.departmentCode)
-                                EdgeShape(from: CGPoint(x: a.x, y: a.y + 30), to: CGPoint(x: b.x, y: b.y - 34))
+                                EdgeShape(from: CGPoint(x: a.x, y: a.y + 50), to: CGPoint(x: b.x, y: b.y - 40))
                                     .trim(from: 0, to: drawn)
                                     .stroke(LinearGradient(colors: [fromD.color, toD.color], startPoint: .top, endPoint: .bottom),
                                             style: StrokeStyle(lineWidth: 2.4, lineCap: .round, dash: e.linkType.dash))
@@ -102,14 +102,14 @@ struct PathMapView: View {
                                     .frame(width: 24, height: 24)
                                     .background(Circle().fill(Palette.surface))
                                     .overlay(Circle().strokeBorder(toD.color.opacity(0.4), lineWidth: 1))
-                                    .position(x: (a.x + b.x) / 2, y: (a.y + b.y) / 2)
+                                    .position(x: (a.x + b.x) / 2, y: (a.y + 50 + b.y - 40) / 2)
                                     .opacity(drawn)
                             }
                         }
                         // Unlinked sequence (e.g. first point to manually added ones)
                         ForEach(layout.placed.filter { p in p.row > 0 && !session.edges.contains { $0.toNodeID == p.node.id } }) { p in
                             if let b = positions[p.node.id], let prev = layout.placed.first(where: { $0.row == p.row - 1 }), let a = positions[prev.node.id] {
-                                EdgeShape(from: CGPoint(x: a.x, y: a.y + 30), to: CGPoint(x: b.x, y: b.y - 34))
+                                EdgeShape(from: CGPoint(x: a.x, y: a.y + 50), to: CGPoint(x: b.x, y: b.y - 40))
                                     .trim(from: 0, to: drawn)
                                     .stroke(Palette.hairline, style: StrokeStyle(lineWidth: 1.5, dash: [2, 5]))
                             }
@@ -175,8 +175,14 @@ struct PathMapView: View {
                     }
                 }
                 Text(d.name).font(.trCaptionBold).foregroundStyle(isCurrent ? d.color : Palette.ink).lineLimit(1)
-                Text(L("Point \(n.order + 1) · \(n.items.filter(\.hasAnswer).count)/\(n.items.count)", "نقطة \(n.order + 1) · \(n.items.filter(\.hasAnswer).count)/\(n.items.count)"))
-                    .font(.trMicro).foregroundStyle(Palette.inkTertiary)
+                HStack(spacing: 4) {
+                    Text(L("Point \(n.order + 1)", "النقطة \(n.order + 1)"))
+                    Text("·")
+                    Image(systemName: "text.bubble").font(.system(size: 8))
+                    Text(verbatim: "\(n.items.filter(\.hasAnswer).count)/\(n.items.count)")
+                        .environment(\.layoutDirection, .leftToRight)
+                }
+                .font(.trMicro).foregroundStyle(Palette.inkTertiary)
             }
             .frame(width: 110)
         }

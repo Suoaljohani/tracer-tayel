@@ -73,7 +73,7 @@ struct SplashView: View {
                         .opacity(wordmark ? 1 : 0)
                     Text(L("INTELLIGENCE", "ذكاء التتبع"))
                         .font(.janna(12, bold: true))
-                        .tracking(isArabic ? 1 : 5)
+                        .tracking(isArabic ? 0 : 5)
                         .foregroundStyle(Color.white.opacity(0.55))
                         .opacity(tagline ? 1 : 0)
                         .offset(y: tagline ? 0 : 6)

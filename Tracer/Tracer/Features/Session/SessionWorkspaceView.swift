@@ -254,8 +254,7 @@ private struct WorkspaceContent: View {
             tabButton(symbol: "clock.arrow.circlepath", title: L("Log", "السجل"), selected: ws.tab == .log) { select(.log) }
         }
         .padding(6)
-        .background(Capsule().fill(.ultraThinMaterial))
-        .background(Capsule().fill(Palette.obsidian.opacity(0.75)))
+        .luxGlass(Capsule(), tint: Palette.obsidian.opacity(0.72))
         .overlay(Capsule().strokeBorder(.white.opacity(0.12), lineWidth: 0.75))
         .shadow(color: .black.opacity(0.25), radius: 20, y: 10)
     }

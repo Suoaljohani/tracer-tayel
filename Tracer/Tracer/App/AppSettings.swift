@@ -7,7 +7,7 @@ enum AppLanguage: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
     var isRTL: Bool { self == .arabic }
-    var locale: Locale { Locale(identifier: self == .arabic ? "ar_SA@numbers=latn" : "en_US") }
+    var locale: Locale { Locale(identifier: self == .arabic ? "ar_SA@calendar=gregorian;numbers=latn" : "en_US") }
     var displayName: String { self == .arabic ? "العربية" : "English" }
 }
 
