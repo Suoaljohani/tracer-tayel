@@ -1,0 +1,69 @@
+name: iOS build (unsigned IPA)
+
+on:
+  push:
+    branches: ["**"]
+    paths:
+      - "Tracer/**"
+      - ".github/workflows/ios-build.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select newest Xcode
+        run: |
+          XCODE=$(ls -d /Applications/Xcode*.app | sort -V | tail -1)
+          echo "Using $XCODE"
+          sudo xcode-select -s "$XCODE/Contents/Developer"
+          xcodebuild -version
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate project
+        working-directory: Tracer
+        run: xcodegen generate
+
+      - name: Build (device, unsigned)
+        working-directory: Tracer
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project Tracer.xcodeproj \
+            -scheme Tracer \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            build 2>&1 | tee xcodebuild.log | grep -E "error:|warning: unre|BUILD (SUCCEEDED|FAILED)" || true
+          grep -q "BUILD SUCCEEDED" xcodebuild.log
+
+      - name: Show compiler errors
+        if: failure()
+        working-directory: Tracer
+        run: grep -E "error:" -A3 xcodebuild.log | head -200 || true
+
+      - name: Package IPA
+        working-directory: Tracer
+        run: |
+          APP=$(find build/Build/Products/Release-iphoneos -maxdepth 1 -name "*.app" | head -1)
+          mkdir -p Payload
+          cp -R "$APP" Payload/
+          zip -qry Tracer-unsigned.ipa Payload
+          ls -la Tracer-unsigned.ipa
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Tracer-unsigned-ipa
+          path: Tracer/Tracer-unsigned.ipa
+          retention-days: 30

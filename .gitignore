@@ -1,0 +1,8 @@
+# Xcode / XcodeGen
+Tracer/Tracer.xcodeproj/
+Tracer/build/
+Tracer/Payload/
+*.ipa
+xcuserdata/
+DerivedData/
+.DS_Store
