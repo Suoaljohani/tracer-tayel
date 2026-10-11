@@ -124,6 +124,7 @@ enum AnalysisError: LocalizedError {
 
 /// Client for the Tracer analysis service hosted on Supabase Edge Functions.
 /// Only the public (anon) key is embedded; the provider key stays on the server.
+@MainActor
 struct AnalysisClient {
     static let endpoint = URL(string: "https://ljdyrdgfscjeiaohbitc.supabase.co/functions/v1/analyze")!
     static let anonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxqZHlyZGdmc2NqZWlhb2hiaXRjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE3NDQwMjksImV4cCI6MjEwNzMyMDAyOX0.OlHDpofTCoTsoayjFmQVJG0ak7JTWVBq3zavBu82B0A"
