@@ -148,7 +148,7 @@ struct HubView: View {
                 Text(Date.now.formatted(dateStyle: .full))
                     .font(.trCaption)
                     .foregroundStyle(Palette.inkSecondary)
-                Text(settings.evaluatorName.isEmpty ? greeting : "\(greeting)، \(settings.evaluatorName)")
+                Text(settings.evaluatorName.isEmpty ? greeting : "\(greeting)\(L(", ", "، "))\(settings.evaluatorName)")
                     .font(.trHero)
                     .foregroundStyle(Palette.ink)
                     .lineLimit(2)

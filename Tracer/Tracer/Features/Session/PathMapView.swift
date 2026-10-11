@@ -64,7 +64,7 @@ struct PathMapView: View {
     @State private var pulse = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    private let rowHeight: CGFloat = 132
+    private let rowHeight: CGFloat = 150
     private let laneWidth: CGFloat = 120
 
     var body: some View {
@@ -92,7 +92,7 @@ struct PathMapView: View {
                             if let a = positions[e.fromNodeID], let b = positions[e.toNodeID] {
                                 let fromD = dept(session.nodes.first { $0.id == e.fromNodeID }?.departmentCode)
                                 let toD = dept(session.nodes.first { $0.id == e.toNodeID }?.departmentCode)
-                                EdgeShape(from: CGPoint(x: a.x, y: a.y + 50), to: CGPoint(x: b.x, y: b.y - 40))
+                                EdgeShape(from: CGPoint(x: a.x, y: a.y + 60), to: CGPoint(x: b.x, y: b.y - 48))
                                     .trim(from: 0, to: drawn)
                                     .stroke(LinearGradient(colors: [fromD.color, toD.color], startPoint: .top, endPoint: .bottom),
                                             style: StrokeStyle(lineWidth: 2.4, lineCap: .round, dash: e.linkType.dash))
@@ -102,14 +102,14 @@ struct PathMapView: View {
                                     .frame(width: 24, height: 24)
                                     .background(Circle().fill(Palette.surface))
                                     .overlay(Circle().strokeBorder(toD.color.opacity(0.4), lineWidth: 1))
-                                    .position(x: (a.x + b.x) / 2, y: (a.y + 50 + b.y - 40) / 2)
+                                    .position(x: (a.x + b.x) / 2, y: (a.y + 60 + b.y - 48) / 2)
                                     .opacity(drawn)
                             }
                         }
                         // Unlinked sequence (e.g. first point to manually added ones)
                         ForEach(layout.placed.filter { p in p.row > 0 && !session.edges.contains { $0.toNodeID == p.node.id } }) { p in
                             if let b = positions[p.node.id], let prev = layout.placed.first(where: { $0.row == p.row - 1 }), let a = positions[prev.node.id] {
-                                EdgeShape(from: CGPoint(x: a.x, y: a.y + 50), to: CGPoint(x: b.x, y: b.y - 40))
+                                EdgeShape(from: CGPoint(x: a.x, y: a.y + 60), to: CGPoint(x: b.x, y: b.y - 48))
                                     .trim(from: 0, to: drawn)
                                     .stroke(Palette.hairline, style: StrokeStyle(lineWidth: 1.5, dash: [2, 5]))
                             }
@@ -143,7 +143,7 @@ struct PathMapView: View {
         let span = CGFloat(maxLane) * laneWidth
         let startX = width / 2 - span / 2
         let x = maxLane == 0 ? width / 2 : startX + CGFloat(lane) * laneWidth
-        return CGPoint(x: min(max(x, 50), width - 50), y: 50 + CGFloat(row) * rowHeight)
+        return CGPoint(x: min(max(x, 55), width - 55), y: 64 + CGFloat(row) * rowHeight)
     }
 
     private func nodeView(_ n: TraceNode) -> some View {
@@ -160,6 +160,7 @@ struct PathMapView: View {
         } label: {
             VStack(spacing: 6) {
                 ZStack {
+                    Color.clear.frame(width: 74, height: 74)
                     if isCurrent {
                         Circle().fill(d.color.opacity(0.18)).frame(width: 74, height: 74)
                             .scaleEffect(pulse ? 1.12 : 0.95)

@@ -212,8 +212,8 @@ struct ReportBuilder {
             // label cells
             fill(CGRect(x: left, y: y, width: lW, height: h), labelFill)
             fill(CGRect(x: midX, y: y, width: l2W, height: h), labelFill)
-            draw(attr(leftLabel, size: 7.5, color: UIColor(hex: 0x333333)), in: CGRect(x: left, y: y, width: lW, height: h), inset: 4)
-            draw(attr(rightLabel, size: 7.5, color: UIColor(hex: 0x333333)), in: CGRect(x: midX, y: y, width: l2W, height: h), inset: 4)
+            draw(attr(leftLabel, size: 7, color: UIColor(hex: 0x333333)), in: CGRect(x: left, y: y, width: lW, height: h), inset: 4)
+            draw(attr(rightLabel, size: 7, color: UIColor(hex: 0x333333)), in: CGRect(x: midX, y: y, width: l2W, height: h), inset: 4)
             if let custom { custom(CGRect(x: left + lW, y: y, width: midX - left - lW, height: h)) }
             else if let lv { draw(lv, in: CGRect(x: left + lW, y: y, width: midX - left - lW, height: h), inset: 4) }
             draw(rv, in: CGRect(x: midX + l2W, y: y, width: rightValueW, height: h), inset: 4)
@@ -234,11 +234,11 @@ struct ReportBuilder {
             fill(CGRect(x: left, y: y, width: lW, height: rh), labelFill)
             fill(CGRect(x: left + lW + dateVW, y: y, width: timeLW, height: rh), labelFill)
             fill(CGRect(x: midX, y: y, width: l2W, height: rh), labelFill)
-            draw(attr("Date of Tracer", size: 7.5, color: UIColor(hex: 0x333333)), in: CGRect(x: left, y: y, width: lW, height: rh), inset: 4)
+            draw(attr("Date of Tracer", size: 7, color: UIColor(hex: 0x333333)), in: CGRect(x: left, y: y, width: lW, height: rh), inset: 4)
             draw(attr(dateF.string(from: session.tracerDate), size: 8), in: CGRect(x: left + lW, y: y, width: dateVW, height: rh), inset: 4)
-            draw(attr("Time of Tracer", size: 7.5, color: UIColor(hex: 0x333333)), in: CGRect(x: left + lW + dateVW, y: y, width: timeLW, height: rh), inset: 4)
+            draw(attr("Time of Tracer", size: 7, color: UIColor(hex: 0x333333)), in: CGRect(x: left + lW + dateVW, y: y, width: timeLW, height: rh), inset: 4)
             draw(attr(timeF.string(from: session.tracerDate), size: 8), in: CGRect(x: left + lW + dateVW + timeLW, y: y, width: midX - (left + lW + dateVW + timeLW), height: rh), inset: 4)
-            draw(attr("Tracer Topic", size: 7.5, color: UIColor(hex: 0x333333)), in: CGRect(x: midX, y: y, width: l2W, height: rh), inset: 4)
+            draw(attr("Tracer Topic", size: 7, color: UIColor(hex: 0x333333)), in: CGRect(x: midX, y: y, width: l2W, height: rh), inset: 4)
             draw(tv, in: CGRect(x: midX + l2W, y: y, width: right - midX - l2W, height: rh), inset: 4)
             stroke(CGRect(x: left, y: y, width: 495, height: rh))
             for vx in [left + lW, left + lW + dateVW, left + lW + dateVW + timeLW, midX, midX + l2W] { vline(vx, y, y + rh) }
@@ -246,14 +246,14 @@ struct ReportBuilder {
         }
 
         // Type of tracer
-        row(minH: 26, leftLabel: "Type of Tracer", leftValue: nil, rightLabel: "Tracer Team", rightValue: team) { r in
-            let types: [[TracerType]] = [[.individual, .system, .program, .highRisk], [.environmentOfCare, .lifeSafety]]
+        row(minH: 34, leftLabel: "Type of Tracer", leftValue: nil, rightLabel: "Tracer Team", rightValue: team) { r in
+            let types: [[TracerType]] = [[.individual, .system, .program], [.highRisk, .environmentOfCare], [.lifeSafety]]
             var yy = r.minY + 4
             for rowTypes in types {
                 var xx = r.minX + 5
                 for t in rowTypes {
                     checkbox(at: CGPoint(x: xx, y: yy + 1.5), checked: topic?.tracerType == t)
-                    let a = attr(t.formTitle, size: 7.5)
+                    let a = attr(t.formTitle, size: 7.2)
                     a.draw(at: CGPoint(x: xx + 9, y: yy))
                     xx += 9 + a.size().width + 8
                 }
@@ -317,7 +317,7 @@ struct ReportBuilder {
 
         // Person asked / standards
         fill(CGRect(x: left, y: y, width: labelW, height: personH), labelFill)
-        draw(attr("Person(s)\nAsked", size: 7.5, color: UIColor(hex: 0x333333)), in: CGRect(x: left, y: y, width: labelW, height: personH), inset: 4)
+        draw(attr("Person(s)\nAsked", size: 7, color: UIColor(hex: 0x333333)), in: CGRect(x: left, y: y, width: labelW, height: personH), inset: 4)
         draw(personAttr, in: CGRect(x: left + labelW, y: y, width: splitX - left - labelW, height: personH), inset: 4)
         draw(stdAttr, in: CGRect(x: splitX, y: y, width: right - splitX, height: personH), inset: 4)
         stroke(CGRect(x: left, y: y, width: 495, height: personH))
@@ -332,7 +332,7 @@ struct ReportBuilder {
         let gy = y
         // Row 0 headers
         draw(attr("Compliant?", size: 7.5, italic: true), in: CGRect(x: compX, y: gy, width: compW, height: rowH), inset: 4, vCenter: true)
-        draw(attr("If insufficient compliance:", size: 7.5, italic: true), in: CGRect(x: likX, y: gy, width: likW + lvlW, height: rowH), inset: 4, vCenter: true)
+        draw(attr("If insufficient compliance:", size: 6.8, italic: true), in: CGRect(x: likX, y: gy - 0.5, width: mX - likX, height: rowH + 1), inset: 2, vCenter: true)
         fill(CGRect(x: mX, y: gy, width: right - mX, height: rowH), itlRed)
         let itl = item.riskApproved && item.approvedImmediateThreat
         let itlSuggested = !item.riskApproved && (item.latestAnalysis?.result?.immediate_threat ?? false)
@@ -405,7 +405,7 @@ struct ReportBuilder {
 
         // Evidence of compliance
         fill(CGRect(x: left, y: y, width: labelW, height: evH), labelFill)
-        draw(attr("Evidence of\nCompliance", size: 7.5, color: UIColor(hex: 0x333333)), in: CGRect(x: left, y: y, width: labelW, height: evH), inset: 4)
+        draw(attr("Evidence of\nCompliance", size: 7, color: UIColor(hex: 0x333333)), in: CGRect(x: left, y: y, width: labelW, height: evH), inset: 4)
         draw(evAttr, in: CGRect(x: left + labelW, y: y, width: right - left - labelW, height: evH), inset: 4)
         stroke(CGRect(x: left, y: y, width: 495, height: evH))
         vline(left + labelW, y, y + evH)
@@ -415,9 +415,9 @@ struct ReportBuilder {
         let dueLX = x(602), dueVX = x(667)
         fill(CGRect(x: left, y: y, width: labelW, height: planH), labelFill)
         fill(CGRect(x: dueLX, y: y, width: dueVX - dueLX, height: planH), labelFill)
-        draw(attr("Plan of\nAction", size: 7.5, color: UIColor(hex: 0x333333)), in: CGRect(x: left, y: y, width: labelW, height: planH), inset: 4)
+        draw(attr("Plan of\nAction", size: 7, color: UIColor(hex: 0x333333)), in: CGRect(x: left, y: y, width: labelW, height: planH), inset: 4)
         draw(planAttr, in: CGRect(x: left + labelW, y: y, width: dueLX - left - labelW, height: planH), inset: 4)
-        draw(attr("Due Date", size: 7.5, color: UIColor(hex: 0x333333)), in: CGRect(x: dueLX, y: y, width: dueVX - dueLX, height: planH), inset: 4)
+        draw(attr("Due Date", size: 7, color: UIColor(hex: 0x333333)), in: CGRect(x: dueLX, y: y, width: dueVX - dueLX, height: planH), inset: 4)
         if let due = item.dueDate {
             let f = DateFormatter(); f.dateStyle = .medium; f.locale = Locale(identifier: "en_GB")
             draw(attr(f.string(from: due), size: 8), in: CGRect(x: dueVX, y: y, width: right - dueVX, height: planH), inset: 4)

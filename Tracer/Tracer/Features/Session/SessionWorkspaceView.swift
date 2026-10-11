@@ -194,7 +194,7 @@ private struct WorkspaceContent: View {
                         .id(current.code)
                         .transition(.scale.combined(with: .opacity))
                     VStack(alignment: .leading, spacing: 2) {
-                        Eyebrow(text: L("Current department", "القسم الحالي"), color: current.bright)
+                        Eyebrow(text: L("Now tracing in", "القسم الحالي"), color: current.bright)
                         Text(current.name)
                             .font(.trTitle)
                             .foregroundStyle(.white)

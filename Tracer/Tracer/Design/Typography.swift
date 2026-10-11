@@ -52,5 +52,7 @@ struct Eyebrow: View {
             .font(.trMicro)
             .tracking(isArabic ? 0 : 1.6)
             .foregroundStyle(color)
+            .lineLimit(1)
+            .minimumScaleFactor(0.8)
     }
 }
