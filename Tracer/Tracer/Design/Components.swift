@@ -59,22 +59,33 @@ struct AmbientBackground: View {
     @Environment(\.colorScheme) private var scheme
 
     var body: some View {
-        TimelineView(.animation(minimumInterval: 1 / 20, paused: reduceMotion)) { ctx in
-            let t = reduceMotion ? 0 : ctx.date.timeIntervalSinceReferenceDate
+        TimelineView(.animation(minimumInterval: 1.0 / 20.0, paused: reduceMotion)) { ctx in
+            let t: Double = reduceMotion ? 0 : ctx.date.timeIntervalSinceReferenceDate
             Canvas { gc, size in
-                let o1 = CGPoint(x: size.width * (0.2 + 0.08 * sin(t / 9)), y: size.height * (0.08 + 0.04 * cos(t / 11)))
-                let o2 = CGPoint(x: size.width * (0.9 + 0.06 * cos(t / 13)), y: size.height * (0.35 + 0.05 * sin(t / 10)))
-                let r = max(size.width, 320) * 0.9
-                gc.addFilter(.blur(radius: 60))
-                gc.fill(Path(ellipseIn: CGRect(x: o1.x - r / 2, y: o1.y - r / 2, width: r, height: r)),
-                        with: .color(accent.opacity(scheme == .dark ? 0.16 : 0.10)))
-                gc.fill(Path(ellipseIn: CGRect(x: o2.x - r / 3, y: o2.y - r / 3, width: r * 0.66, height: r * 0.66)),
-                        with: .color(Color(hex: 0x365A9A).opacity(scheme == .dark ? 0.14 : 0.06)))
+                draw(in: &gc, size: size, t: t)
             }
         }
         .background(Palette.canvas)
         .ignoresSafeArea()
         .allowsHitTesting(false)
+    }
+
+    private func draw(in gc: inout GraphicsContext, size: CGSize, t: Double) {
+        let w = size.width, h = size.height
+        let x1: CGFloat = w * CGFloat(0.2 + 0.08 * sin(t / 9))
+        let y1: CGFloat = h * CGFloat(0.08 + 0.04 * cos(t / 11))
+        let x2: CGFloat = w * CGFloat(0.9 + 0.06 * cos(t / 13))
+        let y2: CGFloat = h * CGFloat(0.35 + 0.05 * sin(t / 10))
+        let r: CGFloat = max(w, 320) * 0.9
+        let dark = scheme == .dark
+        let c1: Color = accent.opacity(dark ? 0.16 : 0.10)
+        let c2: Color = Color(hex: 0x365A9A).opacity(dark ? 0.14 : 0.06)
+        gc.addFilter(.blur(radius: 60))
+        let rect1 = CGRect(x: x1 - r / 2, y: y1 - r / 2, width: r, height: r)
+        let r2: CGFloat = r * 0.66
+        let rect2 = CGRect(x: x2 - r2 / 2, y: y2 - r2 / 2, width: r2, height: r2)
+        gc.fill(Path(ellipseIn: rect1), with: .color(c1))
+        gc.fill(Path(ellipseIn: rect2), with: .color(c2))
     }
 }
 

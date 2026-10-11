@@ -47,7 +47,7 @@ struct RiskShape: Shape {
             // Octagon
             let r = min(w, h) / 2
             for i in 0..<8 {
-                let a = (Double(i) * 45 + 22.5) * .pi / 180
+                let a = (CGFloat(i) * 45 + 22.5) * CGFloat.pi / 180
                 let pt = CGPoint(x: c.x + r * cos(a), y: c.y + r * sin(a))
                 if i == 0 { p.move(to: pt) } else { p.addLine(to: pt) }
             }
